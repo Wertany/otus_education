@@ -1,0 +1,6 @@
+#ifndef VERSION_H_HPP
+#define VERSION_H_HPP
+
+#cmakedefine PROJECT_VERSION_PATCH @PROJECT_VERSION_PATCH@
+
+#endif /* VERSION_H_HPP */
