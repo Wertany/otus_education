@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-set(PATCH_VERSION "6" CACHE INTERNAL "Patch version")
+set(PATCH_VERSION "7" CACHE INTERNAL "Patch version")
 set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 
 project(otus_education VERSION ${PROJECT_VESRION})

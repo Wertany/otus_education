@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - feature/github_actions
 
 jobs:
   build:
@@ -17,6 +16,7 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install cmake -y
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
       - run: cmake --build .
+      - run: cmake --build . --target package
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
