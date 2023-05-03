@@ -29,6 +29,8 @@ if (BUILD_TESTS)
     #Удаляем файл с main() для повторного использования списка исходников
     list(REMOVE_ITEM SOURCES_LIST ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
     add_subdirectory(tests)
+    enable_testing()
+    add_test(otus_education_tests tests/otus_education_tests)
 endif ()
 
 install(TARGETS otus_education RUNTIME DESTINATION bin)

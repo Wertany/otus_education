@@ -23,8 +23,5 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 add_executable(otus_education_tests ${TEST_SOURCES} ${SOURCES_LIST})
+
 target_link_libraries(otus_education_tests gtest gtest_main)
-
-enable_testing()
-
-add_test(otus_education_tests otus_education_tests)
