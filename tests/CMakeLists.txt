@@ -3,13 +3,16 @@ cmake_minimum_required(VERSION 3.20)
 project(otus_education_tests)
 
 #Собираем пользовательсие файлы из включенных в корневом листе исходников(рекурсивный поиск по папкам)
-file(GLOB MAIN_TEST_SOURCES LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/*.cpp)
-file(GLOB HOMEWORK_1 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_1/*.cpp)
+#file(GLOB MAIN_TEST_SOURCES LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/*.cpp)
+#file(GLOB HOMEWORK_1 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_1/*.cpp)
+#file(GLOB HOMEWORK_2 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_2/*.cpp)
+
 
 include_directories("${CMAKE_CURRENT_LIST_DIR}/src")
 
 set(TEST_SOURCES ${MAIN_TEST_SOURCES}
-                 ${HOMEWORK_1})
+                 ${HOMEWORK_1}
+                 ${HOMEWORK_2})
 
 include(FetchContent)
 FetchContent_Declare(
