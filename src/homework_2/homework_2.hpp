@@ -16,12 +16,11 @@ private:
 
 public:
   Filter();
+  Filter(std::string &content);
   Filter(std::vector<std::vector<std::string>> ip_pool) : ip_pool_(ip_pool){};
-  [[maybe_unused]] std::vector<std::vector<std::string>>
-  filter(int16_t ip_part_1 = -1, int16_t ip_part_2 = -1,
-         int16_t ip_part_3 = -1);
-  [[maybe_unused]] std::vector<std::vector<std::string>>
-  filter_any(uint8_t value);
+  [[nodiscard]] std::vector<std::vector<std::string>> 
+  filter(int16_t ip_part_1 = -1, int16_t ip_part_2 = -1, int16_t ip_part_3 = -1);
+  [[nodiscard]] std::vector<std::vector<std::string>> filter_any(uint8_t value);
 };
 
 } // namespace homework_2

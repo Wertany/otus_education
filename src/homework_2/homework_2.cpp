@@ -27,42 +27,45 @@ void Sort(std::vector<std::vector<std::string>>::iterator begin,
           std::vector<std::vector<std::string>>::iterator end, uint8_t i) {
   std::sort(begin, end,
             [i](std::vector<std::string> &lhs, std::vector<std::string> &rhs) {
-              return std::atoi(lhs.at(i).c_str()) >
-                     std::atoi(rhs.at(i).c_str());
+              return std::atoi(lhs.at(i).c_str()) > std::atoi(rhs.at(i).c_str());
             });
 }
 
-constexpr uint8_t count_part_ip{4};
-void Filter::ReverseLexicographicOrder(
-    std::vector<std::vector<std::string>> &ip_pool) {
-  for (uint8_t i = 0; i < count_part_ip; i++) {
-    if (i == 0) {
-      Sort(ip_pool.begin(), ip_pool.end(), i);
-      continue;
-    }
+void RecurseSortBlocksIP(std::vector<std::vector<std::string>>::iterator begin,
+                         std::vector<std::vector<std::string>>::iterator end,
+                         uint8_t index) {
+  if (begin == end || begin == end - 1) {
+    return;
+  }
 
-    for (std::vector<std::vector<std::string>>::iterator begin =
-             ip_pool.begin();
-         begin + 1 != ip_pool.cend();) {
-      for (auto end = begin + 1; end != ip_pool.cend(); end++) {
-        uint8_t temp = i - 1;
-        if (begin->at(temp).compare(end->at(temp)) != 0) {
-          if (begin != end - 1) {
-            Sort(begin, end, i);
-          }
+  Sort(begin, end, index);
 
-          begin = end;
-          break;
+  for (auto begin_ = begin; begin_ + 1 != end;) {
+    for (auto end_ = begin_ + 1;; end_++) {
+      if (begin_->at(index).compare(end_->at(index)) != 0) {
+        if (index > 0 && index != 2) {
+          return;
         }
+        RecurseSortBlocksIP(begin_, end_, index + 1);
+        begin_ = end_;
+        break;
+      }
 
-        if (end + 1 == ip_pool.cend() && begin != ip_pool.end() - 1) {
-          Sort(begin, ip_pool.end(), i);
-          begin = end;
-          break;
+      if (end_ + 1 == end && begin_ != end - 1) {
+        if (index > 0 && index != 2) {
+          return;
         }
+        RecurseSortBlocksIP(begin_, end, index + 1);
+        begin_ = end_;
+        break;
       }
     }
   }
+}
+
+constexpr uint8_t count_part_ip{4};
+void Filter::ReverseLexicographicOrder(std::vector<std::vector<std::string>> &ip_pool) {
+  RecurseSortBlocksIP(ip_pool.begin(), ip_pool.end(), 0);
 }
 
 void PrintIP(const std::vector<std::string> &ip) {
@@ -95,13 +98,26 @@ Filter::Filter() {
     if (line.empty()) {
       break;
     }
-    std::vector<std::string> whole_line = Split(line, '\t');
+    auto whole_line = Split(line, '\t');
     ip_pool_.push_back(Split(whole_line.at(0), '.'));
   }
 }
 
-std::vector<std::vector<std::string>>
-Filter::filter(int16_t ip_part_1, int16_t ip_part_2, int16_t ip_part_3) {
+Filter::Filter(std::string &content) {
+  std::string::size_type start{};
+  std::string::size_type stop = content.find_first_of('\n');
+  while (stop != std::string::npos) {
+    std::string line = content.substr(start, stop - start);
+    auto whole_line = Split(line, '\t');
+    ip_pool_.push_back(Split(whole_line.at(0), '.'));
+
+    start = stop + 1;
+    stop = content.find_first_of('\n', start);
+  }
+}
+
+std::vector<std::vector<std::string>> Filter::filter(int16_t ip_part_1, int16_t ip_part_2,
+                                                     int16_t ip_part_3) {
   if (ip_part_1 > 0 && ip_part_1 <= 255) {
     std::vector<std::vector<std::string>> temp_ip_vector{};
     if (ip_part_2 > 0 && ip_part_2 <= 255) {
@@ -126,8 +142,7 @@ Filter::filter(int16_t ip_part_1, int16_t ip_part_2, int16_t ip_part_3) {
         return temp_ip_vector;
       }
 
-      auto search = [ip_part_1,
-                     ip_part_2](const std::vector<std::string> &ip) -> bool {
+      auto search = [ip_part_1, ip_part_2](const std::vector<std::string> &ip) -> bool {
         if (std::atoi(ip[0].c_str()) == ip_part_1 &&
             std::atoi(ip[1].c_str()) == ip_part_2) {
           return true;

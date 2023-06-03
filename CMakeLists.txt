@@ -33,7 +33,6 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(fmt)
 
-
 add_executable(otus_education ${SOURCES_LIST})
 target_link_libraries(otus_education fmt::fmt)
 add_library(otus_education_lib ${SOURCES_LIST})
