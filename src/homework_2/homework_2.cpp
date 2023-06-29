@@ -1,11 +1,15 @@
 #include "homework_2.hpp"
 
 #include <algorithm>
+#include <cstdint>
+#include <cstdlib>
 #include <iostream>
 
 namespace homework_2 {
 
-std::vector<std::string> Filter::Split(const std::string &str_, char d) {
+namespace {
+
+std::vector<std::string> Split(const std::string &str_, char d) {
   std::vector<std::string> str{};
 
   std::string::size_type start{};
@@ -23,68 +27,74 @@ std::vector<std::string> Filter::Split(const std::string &str_, char d) {
   return str;
 }
 
-void Sort(std::vector<std::vector<std::string>>::iterator begin,
-          std::vector<std::vector<std::string>>::iterator end, uint8_t i) {
+std::vector<uint16_t> StringToUint(std::vector<std::string> &&getting_ip) {
+  std::vector<uint16_t> ip{};
+
+  ip.reserve(getting_ip.size());
+  for (auto &part_ip : getting_ip) {
+    ip.push_back(std::atoi(part_ip.c_str()));
+  }
+
+  return ip;
+}
+
+void PrintListIP(const std::vector<std::vector<uint16_t>> &list_ip) {
+  for (const auto &ip : list_ip) {
+    for (auto ip_part = ip.cbegin(); ip_part != ip.cend(); ++ip_part) {
+      if (ip_part != ip.cbegin()) {
+        std::cout << ".";
+      }
+      std::cout << *ip_part;
+    }
+    std::cout << std::endl;
+  }
+}
+
+void Sort(std::vector<std::vector<uint16_t>>::iterator begin,
+          std::vector<std::vector<uint16_t>>::iterator end, uint8_t i) {
   std::sort(begin, end,
-            [i](std::vector<std::string> &lhs, std::vector<std::string> &rhs) {
-              return std::atoi(lhs.at(i).c_str()) > std::atoi(rhs.at(i).c_str());
+            [i](std::vector<uint16_t> &lhs, std::vector<uint16_t> &rhs) {
+              return lhs.at(i) > rhs.at(i);
             });
 }
 
-void RecurseSortBlocksIP(std::vector<std::vector<std::string>>::iterator begin,
-                         std::vector<std::vector<std::string>>::iterator end,
+// NOLINTBEGIN
+void RecurseSortBlocksIP(std::vector<std::vector<uint16_t>>::iterator begin,
+                         std::vector<std::vector<uint16_t>>::iterator end,
                          uint8_t index) {
   if (begin == end || begin == end - 1) {
     return;
   }
 
   Sort(begin, end, index);
+  if (index == 3) {
+    return;
+  }
 
-  for (auto begin_ = begin; begin_ + 1 != end;) {
-    for (auto end_ = begin_ + 1;; end_++) {
-      if (begin_->at(index).compare(end_->at(index)) != 0) {
-        if (index > 0 && index != 2) {
-          return;
-        }
-        RecurseSortBlocksIP(begin_, end_, index + 1);
-        begin_ = end_;
+  for (auto begin_temp = begin; begin_temp + 1 != end;) {
+    for (auto end_temp = begin_temp + 1;; end_temp++) {
+      if (begin_temp->at(index) != end_temp->at(index)) {
+        RecurseSortBlocksIP(begin_temp, end_temp, index + 1);
+        begin_temp = end_temp;
+
         break;
       }
 
-      if (end_ + 1 == end && begin_ != end - 1) {
-        if (index > 0 && index != 2) {
-          return;
-        }
-        RecurseSortBlocksIP(begin_, end, index + 1);
-        begin_ = end_;
+      if (end_temp + 1 == end && begin_temp != end - 1) {
+        RecurseSortBlocksIP(begin_temp, end, index + 1);
+        begin_temp = end_temp;
         break;
       }
     }
   }
 }
+// NOLINTEND
 
-constexpr uint8_t count_part_ip{4};
-void Filter::ReverseLexicographicOrder(std::vector<std::vector<std::string>> &ip_pool) {
+void ReverseLexicographicOrder(std::vector<std::vector<uint16_t>> &ip_pool) {
   RecurseSortBlocksIP(ip_pool.begin(), ip_pool.end(), 0);
 }
 
-void PrintIP(const std::vector<std::string> &ip) {
-  for (const auto &ip_part : ip) {
-    if (ip_part != *ip.cbegin()) {
-      std::cout << ".";
-    }
-    std::cout << ip_part;
-  }
-  std::cout << std::endl;
-}
-
-void PrintListIP(const std::vector<std::vector<std::string>> &list_ip) {
-  for (const auto &ip : list_ip) {
-    PrintIP(ip);
-  }
-}
-
-void Filter::Sorting(std::vector<std::vector<std::string>> &ip_pool) {
+void Sorting(std::vector<std::vector<uint16_t>> &ip_pool) {
   try {
     ReverseLexicographicOrder(ip_pool);
     PrintListIP(ip_pool);
@@ -93,43 +103,40 @@ void Filter::Sorting(std::vector<std::vector<std::string>> &ip_pool) {
   }
 }
 
+} // namespace
+
 Filter::Filter() {
   for (std::string line; std::getline(std::cin, line);) {
     if (line.empty()) {
       break;
     }
     auto whole_line = Split(line, '\t');
-    ip_pool_.push_back(Split(whole_line.at(0), '.'));
+    ip_pool_.push_back(StringToUint(Split(whole_line.at(0), '.')));
   }
 }
 
-Filter::Filter(std::string &content) {
+Filter::Filter(const std::string &content) {
   std::string::size_type start{};
   std::string::size_type stop = content.find_first_of('\n');
   while (stop != std::string::npos) {
     std::string line = content.substr(start, stop - start);
     auto whole_line = Split(line, '\t');
-    ip_pool_.push_back(Split(whole_line.at(0), '.'));
+    ip_pool_.push_back(StringToUint(Split(whole_line.at(0), '.')));
 
     start = stop + 1;
     stop = content.find_first_of('\n', start);
   }
 }
 
-std::vector<std::vector<std::string>> Filter::filter(int16_t ip_part_1, int16_t ip_part_2,
-                                                     int16_t ip_part_3) {
+std::vector<std::vector<uint16_t>>
+Filter::filter(int16_t ip_part_1, int16_t ip_part_2, int16_t ip_part_3) {
   if (ip_part_1 > 0 && ip_part_1 <= 255) {
-    std::vector<std::vector<std::string>> temp_ip_vector{};
+    std::vector<std::vector<uint16_t>> temp_ip_vector{};
     if (ip_part_2 > 0 && ip_part_2 <= 255) {
       if (ip_part_3 > 0 && ip_part_3 <= 255) {
         auto search = [ip_part_1, ip_part_2,
-                       ip_part_3](const std::vector<std::string> &ip) -> bool {
-          if (std::atoi(ip[0].c_str()) == ip_part_1 &&
-              std::atoi(ip[1].c_str()) == ip_part_2 &&
-              std::atoi(ip[2].c_str()) == ip_part_3) {
-            return true;
-          }
-          return false;
+                       ip_part_3](const std::vector<uint16_t> &ip) -> bool {
+          return ip[0] == ip_part_1 && ip[1] == ip_part_2 && ip[2] == ip_part_3;
         };
 
         for (auto const &ip : ip_pool_) {
@@ -142,12 +149,9 @@ std::vector<std::vector<std::string>> Filter::filter(int16_t ip_part_1, int16_t 
         return temp_ip_vector;
       }
 
-      auto search = [ip_part_1, ip_part_2](const std::vector<std::string> &ip) -> bool {
-        if (std::atoi(ip[0].c_str()) == ip_part_1 &&
-            std::atoi(ip[1].c_str()) == ip_part_2) {
-          return true;
-        }
-        return false;
+      auto search = [ip_part_1,
+                     ip_part_2](const std::vector<uint16_t> &ip) -> bool {
+        return ip[0] == ip_part_1 && ip[1] == ip_part_2;
       };
 
       for (auto const &ip : ip_pool_) {
@@ -160,11 +164,8 @@ std::vector<std::vector<std::string>> Filter::filter(int16_t ip_part_1, int16_t 
       return temp_ip_vector;
     }
 
-    auto search = [ip_part_1](const std::vector<std::string> &ip) -> bool {
-      if (std::atoi(ip[0].c_str()) == ip_part_1) {
-        return true;
-      }
-      return false;
+    auto search = [ip_part_1](const std::vector<uint16_t> &ip) -> bool {
+      return ip[0] == ip_part_1;
     };
 
     for (auto const &ip : ip_pool_) {
@@ -182,12 +183,12 @@ std::vector<std::vector<std::string>> Filter::filter(int16_t ip_part_1, int16_t 
   return ip_pool_;
 }
 
-std::vector<std::vector<std::string>> Filter::filter_any(uint8_t value) {
-  std::vector<std::vector<std::string>> temp_ip_vector{};
+std::vector<std::vector<uint16_t>> Filter::filter_any(uint8_t value) {
+  std::vector<std::vector<uint16_t>> temp_ip_vector{};
 
   for (const auto &ip : ip_pool_) {
     for (const auto &ip_part : ip) {
-      if (std::atoi(ip_part.c_str()) == value) {
+      if (ip_part == value) {
         temp_ip_vector.push_back(ip);
         break;
       }

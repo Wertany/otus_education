@@ -5,11 +5,13 @@ set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 
 project(otus_education VERSION ${PROJECT_VESRION})
 
+# set(CMAKE_CXX_CLANG_TIDY clang-tidy -warnings-as-errors=*)
+
 configure_file(version.h.in version.h)
 
 option(BUILD_TESTS "Builds tests when option is ON" ON)
 
-#Собираем пользовательсие файлы из включенных в основную папку и подпапки
+#Собираем пользовательские файлы из включенных в основную папку и подпапки
 file(GLOB MAIN_SOURCES LIST_DIRECTORIES true ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 file(GLOB HOMEWORK_2 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_2/*.cpp)
 
