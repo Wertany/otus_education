@@ -6,6 +6,7 @@ project(otus_education_tests)
 file(GLOB MAIN_TEST_SOURCES LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/*.cpp)
 file(GLOB HOMEWORK_1 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_1/*.cpp)
 file(GLOB HOMEWORK_2 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_2/*.cpp)
+file(GLOB HOMEWORK_3 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_3/*.cpp)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/resources/ip_filter.tsv 
                ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
@@ -14,7 +15,8 @@ include_directories("${CMAKE_CURRENT_LIST_DIR}/src")
 
 set(TEST_SOURCES ${MAIN_TEST_SOURCES}
                  ${HOMEWORK_1}
-                 ${HOMEWORK_2})
+                 ${HOMEWORK_2}
+                 ${HOMEWORK_3})
 
 include(FetchContent)
 

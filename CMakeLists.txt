@@ -14,6 +14,7 @@ option(BUILD_TESTS "Builds tests when option is ON" ON)
 #Собираем пользовательские файлы из включенных в основную папку и подпапки
 file(GLOB MAIN_SOURCES LIST_DIRECTORIES true ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 file(GLOB HOMEWORK_2 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_2/*.cpp)
+# file(GLOB HOMEWORK_3 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_3/*.cpp)
 
 include_directories("src")
 include_directories("${CMAKE_BINARY_DIR}")
@@ -21,6 +22,7 @@ include_directories("${CMAKE_BINARY_DIR}")
 #Собираем в один лист
 set(SOURCES_LIST ${MAIN_SOURCES}
                  ${HOMEWORK_2})
+                #  ${HOMEWORK_3})
 
 
 set(CMAKE_CXX_STANDARD 20)
@@ -37,7 +39,9 @@ FetchContent_MakeAvailable(fmt)
 
 add_executable(otus_education ${SOURCES_LIST})
 target_link_libraries(otus_education fmt::fmt)
-add_library(otus_education_lib ${SOURCES_LIST})
+# TODO: если раскомментриовать, то компилятор будет жаловаться на fmt. Для решения этой проблемы, 
+# сделать CMakeLists для папки с исходниками
+# add_library(otus_education_lib ${SOURCES_LIST})
 
 # Если надо собирать тесты, собираем исходники в библиотеку и включаем директорию тестов
 if (BUILD_TESTS)
@@ -60,24 +64,24 @@ set(CPACK_PACKAGE_CONTACT example@example.com)
 
 include(CPack)
 
-if (MSVC)
-    target_compile_options(otus_education PRIVATE
-        /W4
-    )
-    target_compile_options(otus_education_lib PRIVATE
-        /W4
-    )
-    target_compile_options(otus_education_tests PRIVATE
-        /W4
-    )
-else ()
-    target_compile_options(otus_education PRIVATE
-        -Wall -Wextra -pedantic -Werror
-    )
-    target_compile_options(otus_education_lib PRIVATE
-        -Wall -Wextra -pedantic -Werror
-    )
-    target_compile_options(otus_education_tests PRIVATE
-        -Wall -Wextra -pedantic -Werror
-    )
-endif()
+# if (MSVC)
+#     target_compile_options(otus_education PRIVATE
+#         /W4
+#     )
+#     target_compile_options(otus_education_lib PRIVATE
+#         /W4
+#     )
+#     target_compile_options(otus_education_tests PRIVATE
+#         /W4
+#     )
+# else ()
+#     target_compile_options(otus_education PRIVATE
+#         -Wall -Wextra -pedantic -Werror
+#     )
+#     target_compile_options(otus_education_lib PRIVATE
+#         -Wall -Wextra -pedantic -Werror
+#     )
+#     target_compile_options(otus_education_tests PRIVATE
+#         -Wall -Wextra -pedantic -Werror
+#     )
+# endif()
