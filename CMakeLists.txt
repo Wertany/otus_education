@@ -14,15 +14,17 @@ option(BUILD_TESTS "Builds tests when option is ON" ON)
 #Собираем пользовательские файлы из включенных в основную папку и подпапки
 file(GLOB MAIN_SOURCES LIST_DIRECTORIES true ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 file(GLOB HOMEWORK_2 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_2/*.cpp)
-# file(GLOB HOMEWORK_3 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_3/*.cpp)
+file(GLOB HOMEWORK_3 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_3/*.cpp)
+file(GLOB HOMEWORK_4 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_4/*.cpp)
 
 include_directories("src")
 include_directories("${CMAKE_BINARY_DIR}")
 
 #Собираем в один лист
 set(SOURCES_LIST ${MAIN_SOURCES}
-                 ${HOMEWORK_2})
-                #  ${HOMEWORK_3})
+                 ${HOMEWORK_2}
+                 ${HOMEWORK_3}
+                 ${HOMEWORK_4})
 
 
 set(CMAKE_CXX_STANDARD 20)
