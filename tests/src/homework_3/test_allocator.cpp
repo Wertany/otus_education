@@ -30,7 +30,6 @@ TEST(Homework3, MainTask) {
     }
 
     homework_3::MyVector<int32_t> my_vector;
-    my_vector.reserve(10);
     for (uint_fast8_t i = 0; i < 10; i++) {
       my_vector.push_back(factorial(i));
     }

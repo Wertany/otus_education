@@ -33,8 +33,8 @@ public:
   [[nodiscard]] pointer allocate(std::size_t n) {
     // fmt::print("Allocator allocate\n");
 
-    if (n < max_size_) {
-      return memory_;
+    if (n + last_index_ < max_size_) {
+      return memory_ + last_index_ + 1;
     }
 
     auto p = reinterpret_cast<pointer>(
@@ -43,18 +43,17 @@ public:
       throw std::bad_alloc();
     }
 
-    // Не уверен, что память memory_[index] освобождается
     for (size_type index = 0; index < last_index_; ++index) {
-      p[index] = std::move(memory_[index]);
+      p[index] = memory_[index];
     }
 
     for (size_type index = 0; index < last_index_; ++index) {
       destroy(&memory_[index]);
     }
-
+    std::free(memory_);
+    
     max_size_ = n;
-
-    memory_ = reinterpret_cast<T *>(p);
+    memory_ = p;
 
     return memory_;
   }

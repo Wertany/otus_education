@@ -17,7 +17,7 @@ private:
 
   std::size_t size_{0};
   T *data_{nullptr};
-  std::size_t capacity_;
+  std::size_t capacity_{0};
 
 public:
   MyVector() = default;
@@ -47,7 +47,7 @@ public:
     if (capacity_ == 0) {
       reserve(kDefaultReserve);
     } else if (size_ == capacity_) {
-      reserve(capacity_ * 2);
+      reserve(capacity_ * 2 + 1);
     }
     allocator_.construct(&data_[size_], value);
     size_++;
