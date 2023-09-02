@@ -5,7 +5,7 @@
 #include <memory>
 #include <optional>
 
-#include "homework_3/allocator.hpp"
+#include "allocator.hpp"
 
 namespace homework_3 {
 

@@ -42,6 +42,7 @@ public:
     if (!p) {
       throw std::bad_alloc();
     }
+    ++last_index_;
 
     for (size_type index = 0; index < last_index_; ++index) {
       p[index] = memory_[index];
@@ -60,12 +61,12 @@ public:
 
   void deallocate(pointer p, size_type) {
     // fmt::print("Allocator deallocate\n");
+    last_index_ = 0;
     std::free(p);
   }
 
   template <class Up, class... Args> void construct(Up *p, Args &&...args) {
     // fmt::print("Allocator construct\n");
-    ++last_index_;
     ::new (reinterpret_cast<void *>(p)) Up(std::forward<Args>(args)...);
   }
 
