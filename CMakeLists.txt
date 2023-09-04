@@ -16,6 +16,7 @@ file(GLOB MAIN_SOURCES LIST_DIRECTORIES true ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c
 file(GLOB HOMEWORK_2 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_2/*.cpp)
 file(GLOB HOMEWORK_3 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_3/*.cpp)
 file(GLOB HOMEWORK_4 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_4/*.cpp)
+file(GLOB HOMEWORK_5 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_5/*.cpp)
 
 include_directories("src")
 include_directories("${CMAKE_BINARY_DIR}")
@@ -24,7 +25,8 @@ include_directories("${CMAKE_BINARY_DIR}")
 set(SOURCES_LIST ${MAIN_SOURCES}
                  ${HOMEWORK_2}
                  ${HOMEWORK_3}
-                 ${HOMEWORK_4})
+                 ${HOMEWORK_4}
+                 ${HOMEWORK_5})
 
 
 set(CMAKE_CXX_STANDARD 20)
