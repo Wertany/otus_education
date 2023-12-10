@@ -1,5 +1,6 @@
+int main() {
 
-int main() {}
+}
 
 /* Д/з №2*/
 // #include <iostream>

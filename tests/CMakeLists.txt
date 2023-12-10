@@ -8,7 +8,7 @@ file(GLOB HOMEWORK_1 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homewor
 file(GLOB HOMEWORK_2 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_2/*.cpp)
 file(GLOB HOMEWORK_3 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_3/*.cpp)
 file(GLOB HOMEWORK_4 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_4/*.cpp)
-file(GLOB HOMEWORK_5 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_4/*.cpp)
+file(GLOB HOMEWORK_5 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_5/*.cpp)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/resources/ip_filter.tsv 
                ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
