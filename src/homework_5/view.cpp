@@ -7,7 +7,7 @@
 #include <utility>
 
 #include "fmt/core.h"
-#include "homework_5/graphical_objects.hpp"
+#include "graphical_objects.hpp"
 
 namespace homework_5 {
 
