@@ -16,9 +16,11 @@ file(GLOB HOMEWORK_2 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homewor
 file(GLOB HOMEWORK_5 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_5/*.cpp)
 file(GLOB HOMEWORK_6 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_6/*.cpp)
 file(GLOB HOMEWORK_7 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_7/*.cpp)
+file(GLOB HOMEWORK_8 LIST_DIRECTORIES true ${CMAKE_CURRENT_LIST_DIR}/src/homework_8/*.cpp)
 add_subdirectory(src/homework_5)
 add_subdirectory(src/homework_6)
 add_subdirectory(src/homework_7)
+add_subdirectory(src/homework_8)
 
 #Собираем в один лист
 set(SOURCES_LIST ${HOMEWORK_2}
