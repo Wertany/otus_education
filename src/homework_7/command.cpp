@@ -3,14 +3,32 @@
 #include <chrono>
 #include <cstddef>
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <string_view>
 
+#include "fmt/base.h"
 #include "fmt/core.h"
 #include "fmt/format.h"
 #include "logger.hpp"
 
 namespace homework_7 {
+
+void LoggingToFile::Publish(std::string_view message) {
+  Logger::GetInstance().WriteToLogFile(message);
+}
+
+void LoggingToConsole::Publish(std::string_view message) { fmt::print(message); }
+
+CommandAccumulator::CommandAccumulator() {
+#ifdef LOG_TO_FILE
+  AddObjectLogToFile();
+#endif// LOG_TO_FILE
+
+#ifdef LOG_TO_CONSOLE
+  AddObjectLogToConsole();
+#endif// LOG_TO_CONSOLE
+}
 
 void CommandAccumulator::AddCommand(std::string_view command) {
   if (commands_.empty()) { first_command_time_ = std::chrono::system_clock::now(); }
@@ -28,12 +46,20 @@ void CommandAccumulator::LogCommands() {
   for (const auto &command : commands_) { bulk_message += command + ", "; }
   *(bulk_message.rbegin() + 1) = '\n';
 
-  Logger::GetInstance().WriteToLogFile(bulk_message);
+  for (const auto &logger : loggers_) { logger->Publish(bulk_message); }
 }
 
 void CommandAccumulator::LogAndClearCommands() {
   LogCommands();
   commands_.clear();
+}
+
+void CommandAccumulator::AddObjectLogToFile() {
+  loggers_.push_back(std::make_unique<LoggingToFile>());
+}
+
+void CommandAccumulator::AddObjectLogToConsole() {
+  loggers_.push_back(std::make_unique<LoggingToConsole>());
 }
 
 CommandProcessor::CommandProcessor(std::size_t num_commands)

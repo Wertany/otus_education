@@ -5,13 +5,31 @@
 #include <cstddef>
 #include <istream>
 #include <list>
+#include <memory>
 #include <string>
 #include <string_view>
 
 namespace homework_7 {
 
+class PublicationObserver {
+ public:
+  virtual void Publish(std::string_view message) = 0;
+};
+
+class LoggingToFile final : public PublicationObserver {
+ public:
+  void Publish(std::string_view message) final;
+};
+
+class LoggingToConsole final : public PublicationObserver {
+ public:
+  void Publish(std::string_view message) final;
+};
+
 class CommandAccumulator final {
  public:
+  CommandAccumulator();
+
   void AddCommand(std::string_view command);
 
   void LogCommands();
@@ -24,6 +42,10 @@ class CommandAccumulator final {
  private:
   std::list<std::string> commands_;
   std::chrono::system_clock::time_point first_command_time_;
+  std::list<std::unique_ptr<PublicationObserver>> loggers_;
+
+  void AddObjectLogToFile();
+  void AddObjectLogToConsole();
 };
 
 class CommandProcessor final {
