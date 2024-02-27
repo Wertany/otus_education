@@ -14,14 +14,15 @@ Observer::Observer(CommandProcessor &processor) : processor_(processor) {}
 
 void Observer::Stop() {
   thread_.request_stop();
-  thread_.join();
+  std::this_thread::sleep_for(std::chrono::milliseconds(20));
+  if (thread_.joinable()) { thread_.detach(); }
 }
 
 LoggingToConsole::LoggingToConsole(CommandProcessor &processor) : Observer(processor) {
-  thread_ = std::jthread{[&](std::stop_token stoken) { // NOLINT
+  thread_ = std::jthread{[&](std::stop_token stoken) {// NOLINT
     while (!stoken.stop_requested()) {
       if (processor_.QueueBlocksConsoleIsEmpty()) {
-        // std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
         continue;
       }
       Update(processor.GetFirstBlockConsole(), {});
@@ -34,10 +35,10 @@ void LoggingToConsole::Update(std::string_view, std::string_view block) {
 }
 
 LoggingToFile::LoggingToFile(CommandProcessor &processor) : Observer(processor) {
-  thread_ = std::jthread{[&](std::stop_token stoken) { // NOLINT
+  thread_ = std::jthread{[&](std::stop_token stoken) {// NOLINT
     while (!stoken.stop_requested()) {
       if (processor_.QueueBlocksFilesIsEmpty()) {
-        // std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
         continue;
       }
       auto block = processor_.GetFirstBlockFiles();
