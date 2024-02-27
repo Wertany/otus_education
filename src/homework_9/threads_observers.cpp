@@ -25,7 +25,7 @@ LoggingToConsole::LoggingToConsole(CommandProcessor &processor) : Observer(proce
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
         continue;
       }
-      Update(processor.GetFirstBlockConsole(), {});
+      Update({}, processor.GetFirstBlockConsole());
     }
   }};
 }

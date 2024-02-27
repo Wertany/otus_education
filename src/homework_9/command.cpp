@@ -75,7 +75,6 @@ void CommandProcessor::LogBlock() {
   auto block = accumulator_.GetBlock();
   queue_blocks_for_console_.push(block.second);
   queue_blocks_for_files_.push(block);
-  fmt::print("{}", block.second);
 }
 
 }// namespace homework_9
