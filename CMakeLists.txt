@@ -24,6 +24,7 @@ add_subdirectory(src/homework_7)
 add_subdirectory(src/homework_8)
 add_subdirectory(src/homework_9)
 add_subdirectory(src/homework_10)
+add_subdirectory(src/homework_11)
 
 #Собираем в один лист
 set(SOURCES_LIST ${HOMEWORK_2}
